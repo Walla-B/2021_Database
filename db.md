@@ -14,6 +14,17 @@ RDBMS : Relational DBMS
 
 MariaDB (on WSL2 Ubuntu)
 
+셸에서 실행시 다음 오류와 함꼐 실행되지 않는 경우가 발생한다.
+
+```
+ERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/run/mysqld/mysqld.sock' (2)
+```
+이는 mysql 서버가 자동으로 실행되지 않았기 떄문에 발생하는 오류이므로 다음 명령어를 통해 mysql 서버를 수동으로 실행해 준뒤 실행하면 잘 동작한다.
+```
+$ sudo /etc/init.d/mysql start
+$ sudo mariadb
+```
+
 기본 사용법
 
 [SQL  Documentation](https://www.w3schools.com/sql/sql_syntax.asp)
