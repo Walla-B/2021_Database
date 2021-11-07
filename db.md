@@ -134,31 +134,99 @@ VALUES
 
 ```sql
 //4.5.1
-SELECT C.eid
+SELECT DISTINCT C.eid
 FROM Aircraft A, Certified C
 WHERE A.aid = C.aid AND A.aname = ‘Boeing’
 
 //4.5.2
-SELECT E.ename
+SELECT DISTINCT E.ename
 FROM Aircraft A, Certified C, Employees E
 WHERE A.aid = C.aid AND A.aname = ‘Boeing’ AND E.eid = C.eid
 
 //4.5.3
-SELECT A.aid
+SELECT DISTINCT A.aid
 FROM Aircraft A, Flights F
-WHERE F.from = ‘Bonn’ AND F.to = ‘Madrid’ AND
+WHERE F.f_from = ‘Bonn’ AND F.f_to = ‘Madrid’ AND
 A.cruisingrange > F.distance
 
 //4.5.4
-SELECT E.ename
+SELECT DISTINCT E.ename
 FROM Aircraft A, Certified C, Employees E, Flights F
 WHERE A.aid = C.aid AND E.eid = C.eid AND
 distance < cruisingrange AND salary > 100,000
 
 //4.5.5
-SELECT E.ename
+SELECT DISTINCT E.ename
 FROM Certified C, Employees E, Aircraft A
 WHERE A.aid = C.aid AND E.eid = C.eid AND A.cruisingrange > 3000
 AND E.eid NOT IN ( SELECT C2.eid
 FROM Certified C2, Aircraft A2
-WHERE C2.aid = A2.aid AND A2.aname = ‘Boeing’ )```
+WHERE C2.aid = A2.aid AND A2.aname = ‘Boeing’ )
+
+
+
+SELECT DISTINCT ...
+```sql
+CREATE TABLE Employees ( eid INTEGER(11), ename CHAR(20), salary INTEGER(11), PRIMARY KEY (eid));
+
+INSERT INTO Employees
+VALUES 
+('10001','Samera Patel','120000'),
+('10002','Stanislaw Silva','80000'),
+('10003','Spencer Hopper','200000'),
+('10004','Olivier Wilks','75000'),
+('10005','Mayson Donald','230000'),
+('10006','Yousef Colon','30000'),
+('10007','Efan Davey','550000'),
+('10008','Eesa Cuevas','86000'),
+('10009','Jayson Cartwright','50000'),
+('10010','Pawel Kim','640000');
+
+CREATE TABLE Aircraft ( aid INTEGER(11), aname CHAR(20), cruisingrange INTEGER(11), PRIMARY KEY (aid));
+
+INSERT INTO Aircraft 
+VALUES 
+('20001','Boeing','1000'),
+('20002','Boeing','2000'),
+('20003','Boeing','4000'),
+('20004','Boeing','8000'),
+('20005','Boeing','9000'),
+('20006','Airbus','2400'),
+('20007','Airbus','3500'),
+('20008','Airbus','4400'),
+('20009','Lockheed','2500'),
+('20010','Lockheed','5400');
+
+CREATE TABLE Flights ( flno INTEGER(11), f_from CHAR(20), f_to CHAR(20), distance INTEGER(11), departs TIME, arrives TIME, PRIMARY KEY (flno));
+
+INSERT INTO Flights
+VALUES
+('30001','Seoul','Tokyo','3000','12:00:00','13:00:00'),
+('30002','Seoul','Beijing','7000','13:00:00','15:00:00'),
+('30003','Osaka','Pusan','2700','14:00:00','14:50:00'),
+('30004','Osaka','HongKong','8200','11:30:00','13:45:00'),
+('30005','Bonn','Madras','3800','15:30:00','17:45:00');
+
+
+CREATE TABLE Certified ( eid INTEGER(11), aid INTEGER(11),PRIMARY KEY (eid,aid), FOREIGN KEY (eid) REFERENCES Employees (eid), FOREIGN KEY (aid) REFERENCES Aircraft (aid));
+
+INSERT INTO Certified
+VALUES
+('10001','20001'),
+('10001','20002'),
+('10001','20007'),
+('10002','20003'),
+('10002','20008'),
+('10003','20003'),
+('10003','20004'),
+('10003','20005'),
+('10004','20002'),
+('10004','20009'),
+('10006','20005'),
+('10007','20007'),
+('10007','20010'),
+('10009','20008'),
+('10010','20004'),
+('10010','20007');
+
+```
